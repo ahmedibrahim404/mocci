@@ -4,6 +4,7 @@
   "description": "Query package that is used with Nodejs",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon --exec babel-node test.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/ahmedibrahim404/mocci/issues"
   },
-  "homepage": "https://github.com/ahmedibrahim404/mocci#readme"
+  "homepage": "https://github.com/ahmedibrahim404/mocci#readme",
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "jest": "^24.1.0"
+  }
 }
