@@ -1,31 +1,79 @@
 import { MocciType, MocciString, MocciInteger, MocciQuery, MocciGroup } from './scripts/Types';
 import implementQuery from './scripts/QueryImplementation';
 
+
+
+const PostType = new MocciType({
+    name:"Post",
+    fields:{
+        title:new MocciString
+    }
+});
+
 const UserType = new MocciType({
     name:"User",
     fields:{
         name:new MocciString,
-        age:new MocciInteger
+        password: new MocciString,
+        age:new MocciInteger,
+        post: PostType
     }
 });
 
+const users = [
+    { id:1, name:"AHMED", password:"123123" },
+    { id:2, name:"HASSAN", password:"131323H" },
+    { id:3, name:"MOHAMED", password:"312123" },
+    { id:4, name:"A123", password:"YYYY123" },
+]
 
-const userQuery = new MocciQuery({
+const posts = [
+    { user_id:1, title:"HELLO AHMED POST" },
+    { user_id:2, title:"HELLO HASSAN POST" },
+    { user_id:3, title:"HELLO MOHAMED POST" },
+    { user_id:4, title:"HELLO A123 POST" }
+]
+
+new MocciQuery({
     name:"user",
     type: UserType,
     resolve(params, parent){
-        console.log("RECEIVED", params);
+        const user = users.filter((v) => v.id == params.id)
+        return user[0];
+    }
+});
+
+new MocciQuery({
+    name:"post",
+    type: PostType,
+    resolve(params, parent){
+        const post = posts.filter((v) => v.user_id == parent.id)
+        return post[0];
     }
 });
 
 var query = {
     user: {
-        id:15,
+        id:1,
         params:[
             "name",
-            "password"
+            "password",
+            {
+                post:{
+                    params:["title"]
+                }
+            }
         ]
     }
 }
 
-implementQuery(query);
+console.log(implementQuery(query));
+
+/*
+
+    Output: 
+    { name: 'AHMED',
+    password: '123123',
+    post: { title: 'HELLO AHMED POST' } }
+
+*/
