@@ -1,11 +1,17 @@
 let types = {
     types:{},
     addType(name, fields){
-        this.types[name] = { name, fields };
+        if(!this.checkType(name))
+            this.types[name] = { name, fields };
     },
-    checkQuery(name){
+    checkType(name){
         return this.types[name] ? true : false;
+    },
+    getType(name) {
+        return this.types[name] ? this.types[name] : false;
     }
+
+
 };
 
 export default types;

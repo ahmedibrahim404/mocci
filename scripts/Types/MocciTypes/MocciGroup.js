@@ -5,7 +5,7 @@
  */
 
 const Group = (name) => {
-    return { name }
+    return { name, data: { Type:"Group" } }
 }
 
 export default class MocciGroup {

@@ -8,11 +8,11 @@ export default class MocciQuery {
         // Check of name and fields;
         if(!inf.name || !inf.type || !inf.resolve) return -1;
         // Check of the Type
-        if(!inf.type.data || !inf.type.data.Type || typeof inf.type.data['Type'] != 'function') return -1;
+        if(!inf.type.data || !inf.type.data.Type || (typeof inf.type.data['Type'] != 'function' && inf.type.data['Type'] != 'Group')) return -1;
 
         // Add the Query
         ManipulateQueries.addQuery(inf.name, inf.type, inf.resolve);
-
+        
         return {
             query:() => MocciQuery
         }

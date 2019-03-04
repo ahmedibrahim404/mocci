@@ -17,7 +17,7 @@ class MocciType {
         this.name = inf.name;
         this.fields = inf.fields;
         
-        if(TypesHandler.checkQuery(this.name)) return;
+        if(TypesHandler.checkType(this.name)) return;
         
         TypesHandler.addType(this.name, this.fields);
         return {

@@ -13,10 +13,11 @@ const PostType = new MocciType({
 const UserType = new MocciType({
     name:"User",
     fields:{
+        id: new MocciInteger,
         name:new MocciString,
         password: new MocciString,
         age:new MocciInteger,
-        post: PostType
+        post: PostType,
     }
 });
 
@@ -44,6 +45,15 @@ new MocciQuery({
 });
 
 new MocciQuery({
+    name:"users",
+    type: new MocciGroup(UserType),
+    resolve(params, parent){
+        // const use = users.filter((v) => v.id == params.id)
+        return users;
+    }
+});
+
+new MocciQuery({
     name:"post",
     type: PostType,
     resolve(params, parent){
@@ -52,15 +62,33 @@ new MocciQuery({
     }
 });
 
+
 var query = {
-    user: {
-        id:1,
+    users: {
         params:[
+            "id",
             "name",
             "password",
             {
                 post:{
+                    inherit:["id", "name"],
                     params:["title"]
+                }
+            }
+        ]
+    },
+    user: {
+        id:1,
+        params:[
+            "id",
+            "name",
+            "password",
+            {
+                post:{
+                    inherit:["id"],
+                    params:[
+                        "title",
+                    ]
                 }
             }
         ]
@@ -69,11 +97,3 @@ var query = {
 
 console.log(implementQuery(query));
 
-/*
-
-    Output: 
-    { name: 'AHMED',
-    password: '123123',
-    post: { title: 'HELLO AHMED POST' } }
-
-*/
