@@ -1,12 +1,10 @@
 import { MocciType, MocciString, MocciInteger, MocciQuery, MocciGroup } from './scripts/Types';
 import implementQuery from './scripts/QueryImplementation';
 
-
-
 const PostType = new MocciType({
     name:"Post",
     fields:{
-        title:new MocciString
+        title:new MocciString,
     }
 });
 
@@ -71,8 +69,10 @@ var query = {
             "password",
             {
                 post:{
-                    inherit:["id", "name"],
-                    params:["title"]
+                    inherit:["id"],
+                    params:[
+                        "title",
+                    ]
                 }
             }
         ]

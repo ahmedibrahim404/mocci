@@ -1,27 +1,53 @@
 import implementQuery from './index';
 
-let applyChanges = (params, resolveReturn, queryParameters, typeFields) => {
+let applyChanges = (params, resolveReturn, queryParameters, typeFields, typeName) => {
     
     let dataRequired={};
 
+    // console.log(resolveReturn, params);
+    // console.log(resolveReturn);
+
     for(let param of params){
         if(typeof param == 'string'){
-            if(!typeFields.hasOwnProperty(param)) return;
-            if(resolveReturn && resolveReturn[param]) dataRequired[param]=resolveReturn[param];
-        } else if (typeof param == 'object'){
-            for(let subparam in param){
-                if(!typeFields.hasOwnProperty(subparam)) return;      
-                let query={};
-                query[subparam]=param[subparam];
-
-                if(query[subparam].inherit){
-                    const inheritParams=query[subparam].inherit;
-                    for(let paramInherit of inheritParams)
-                        if(resolveReturn[paramInherit])
-                            queryParameters[paramInherit] = resolveReturn[paramInherit];
+            
+            try {
+                if(typeFields.hasOwnProperty(param)){
+                    if(resolveReturn && resolveReturn[param]) dataRequired[param]=resolveReturn[param];
+                } else {
+                    throw new Error(`doesn't have Parameter named ${param}`);
                 }
+            } catch (err){
+                console.log(err.stack);
+            }
 
-                dataRequired[subparam] = implementQuery(query, queryParameters);
+        } else if (typeof param == 'object'){
+
+
+            
+            for(let subparam in param){
+                try {
+                    
+                    // if(subparam == "author") console.log(resolveReturn);
+
+                    if(typeFields.hasOwnProperty(subparam)){
+                        let query={};
+                        query[subparam]=param[subparam];
+        
+                        if(query[subparam].inherit){
+                            const inheritParams=query[subparam].inherit;
+                            for(let paramInherit of inheritParams)
+                                if(resolveReturn[paramInherit]){
+                                    queryParameters[paramInherit] = resolveReturn[paramInherit];
+                                }
+                        }
+
+                        dataRequired[subparam] = implementQuery(query, queryParameters);;   
+                    } else {
+                        // throw new Error(`doesn't have Parameter named ${subparam}`);
+                    }  
+                } catch (err){
+                    console.log(err.stack);
+                }
             }
         }
 
